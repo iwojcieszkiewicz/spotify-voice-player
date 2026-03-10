@@ -1,11 +1,16 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id="f63c43209c4e4019a7e0184c08d4f322",
-    client_secret="b59d2c5bee5a4c20be8bccf6c00ce8e0",
-    redirect_uri="http://127.0.0.1:8888/callback",
-    scope="user-modify-playback-state user-read-playback-state"
+    client_id=os.getenv("CLIENT_ID"),
+    client_secret=os.getenv("CLIENT_SECRET"),
+    redirect_uri=os.getenv("REDIRECT_URI"),
+    scope="user-modify-playback-state user-read-playback-state playlist-read-private playlist-read-collaborative"
 ))
 
 def play_song(query):
@@ -34,3 +39,13 @@ def next_song():
 def previous_track():
     sp.previous_track()
     print("Puszczono poprzednią piosenkę")
+
+def get_my_playlists_uri():
+    playlists = sp.current_user_playlists()
+    print("Twoje playlisty:")
+    for i, pl in enumerate(playlists['items']):
+        print(f"{i+1}. {pl['name']}")
+    return playlists['items'][1]
+
+def play_playlist():
+    sp.start_playback(context_uri='spotify:playlist:28foiMOcX3EROacW86X3go')
