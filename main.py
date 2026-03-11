@@ -1,10 +1,11 @@
 import speech_recognition as sr
-from spotify import play_song, pause_song, start_song, next_song, previous_track, play_playlist
+from spotify import Spotify
+from gui import Gui
 from pynput import keyboard
 
 recognizer = sr.Recognizer()
-
-# play_playlist()
+spotify = Spotify()
+gui = Gui()
 
 def on_press(key):
     try:
@@ -19,18 +20,18 @@ def on_press(key):
                 if text == "wyjdź":
                     return
                 elif "stop" in text.lower():
-                    pause_song()
+                    spotify.pause_song()
                 elif "wznów" in text.lower():
-                    start_song()
+                    spotify.start_song()
                 elif "następna" in text.lower():
-                    next_song()
+                    spotify.next_song()
                 elif "poprzednia" in text.lower():
-                    previous_track()
+                    spotify.previous_track()
                 elif "playlista" in text.lower():
-                    play_playlist()
+                    spotify.play_playlist()
                 elif "play" in text.lower():
                     song = text[4:]
-                    play_song(song)
+                    spotify.play_song(song)
             except sr.UnknownValueError:
                 print("Nie rozpoznano mowy")
             except sr.RequestError as e:
